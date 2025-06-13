@@ -1,11 +1,11 @@
-name: Build Obfuscate yg_tro
+name: Build Obfuscate my_tro
 
 on:
   push:
     branches:
       - main
   schedule:
-    - cron: "0 2 * * *"  # 每天凌晨2点自动运行
+    - cron: "0 3 * * *"  # 每天凌晨3点自动运行
   workflow_dispatch:     # 支持手动运行
 
 permissions:
@@ -29,12 +29,16 @@ jobs:
           npm install -g javascript-obfuscator
           sudo apt-get install -y unzip
 
-      - name: Download and extract latest yg_tro worker
+      - name: Download and extract latest my_tro worker
         run: |
-          wget https://raw.githubusercontent.com/camel52zhang/yg-tro/refs/heads/main/_worker.js
+          wget https://raw.githubusercontent.com/camel52zhang/my_tro/refs/heads/main/_worker.js
           mv _worker.js origin.js
 
-      - name: Obfuscate yg_tro worker js
+      - name: Clean existing obfuscated files  # 新增清理步骤
+        run: |
+          rm -f _worker.js*
+
+      - name: Obfuscate my_tro worker js
         run: |
           javascript-obfuscator origin.js --output _worker.js \
           --compact true \
@@ -51,6 +55,6 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           branch: main
-          commit_message: ':arrow_up: update latest yg_tro'
+          commit_message: ':arrow_up: update latest my_tro'
           commit_author: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
           push_options: '--set-upstream'
